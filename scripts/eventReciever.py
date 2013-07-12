@@ -11,6 +11,7 @@ if __name__ == "__main__":
 		pandoraUtils.log("Error reading event type from command arguments")
 
 	event_type = sys.argv[1]
+	pandoraUtils.log("event_type="+event_type)
 
 	# Read parameters from input
 	params = {}
@@ -37,10 +38,12 @@ if __name__ == "__main__":
 		info["stations"] = stations
 
 		pandoraUtils.setShared(info)
+		pandoraUtils.parseAndWrite()
 
 	elif event_type == "songfinish":
 		pass
 	elif event_type == "usergetstations":
 		pass
+	elif event_type == "userlogin":
+		pandoraUtils.writeToLCD("Logging in...")
 
-	pandoraUtils.parseAndWrite()
