@@ -4,8 +4,6 @@ LCD = serial.Serial('/dev/ttyAMA0', 9600)
 
 def writeToLCD(line1 = "", line2 = ""):
 
-	global LCD
-	
 	if line2 == "" and len(line1) > 16:
 		tempLine = line1
 		line1 = tempLine[0:16]
@@ -32,9 +30,7 @@ def lcdLine(text):
 
 def log(msg):
 
-	global scripts_folder_location
-
-	f = open('/home/pi/.config/pianobar/scripts/pandorabox.log', 'a+')
+	f = open('pandorabox.log', 'a+')
 	f.write(msg + '\n')
 	f.close()
 
@@ -48,9 +44,8 @@ def parseAndWrite(changedStation = False):
 		writeToLCD(getShared("song"), getShared("artist"))
 
 def getShared(key):
-	global scripts_folder_location
 
-	fp = open("/home/pi/.config/pianobar/scripts/shared.pkl")
+	fp = open("shared.pkl")
 	shared = pickle.load(fp)
 	fp.close()
 	
@@ -58,8 +53,7 @@ def getShared(key):
 
 def setShared(dictItems):
 
-	global scripts_folder_location
-	
-	fp = open("/home/pi/.config/pianobar/scripts/shared.pkl","w")
+	fp = open("shared.pkl", "w")
 	pickle.dump(dictItems, fp)
 	fp.close()
+
