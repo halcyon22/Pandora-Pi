@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-gpio -g mode 22 in
+gpio -g mode 9 in
 
-if [ $(gpio -g read 22) = 1 ]
+# prevent startup if button6 is pushed
+if [ $(gpio -g read 9) = 1 ]
 then
-	sudo python /home/pi/.config/pianobar/scripts/ButtonWatcher.py
+	sudo python /home/pi/src/Pandora-Pi/scripts/ButtonWatcher.py
 fi
