@@ -7,8 +7,6 @@ import state
 class Page1(Base):
     """PandoraBox menu page 1"""
 
-    total_stations = 10
-
     def button1(self):
         pandoraUtils.log('Page 1 - Button 1 - Skip Song')
 
@@ -17,13 +15,18 @@ class Page1(Base):
 
 
     def button2(self):
-        pandoraUtils.log('Page 1 - Button 2 - Skip Station')
+        pandoraUtils.log('Page 1 - Button 2 - Next Station')
 
-        current_station = str(randint(1, self.total_stations))
-        pandoraUtils.log('new station: '+current_station)
+        current_station = pandoraUtils.getShared("stationNumber")
+        station_count = pandoraUtils.getShared("stationCount")
+        next_station = current_station + 1
+        if (next_station >= station_count):
+            next_station = 0
+
+        pandoraUtils.log('next station: '+str(next_station))
 
         pandoraUtils.writeToLCD("Next", "Station")
-        pandoraUtils.sendCommand('s'+current_station)
+        pandoraUtils.sendCommand('s'+str(next_station))
 
         # "listening to .."
         pandoraUtils.parseAndWrite(8, True)
