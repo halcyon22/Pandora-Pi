@@ -1,8 +1,12 @@
-import os, pickle, serial
+import os, pickle, serial, fcntl
 from time import sleep
 
-fifo = '/home/pi/.config/pianobar/ctl'
+FIFO = '/home/pi/.config/pianobar/ctl'
+SHARED_FILE = 'shared.pkl'
 LCD = serial.Serial('/dev/ttyAMA0', 9600)
+CLEAR = '\xFE\x01'
+TO_LINE1 = '\xFE\x80'
+TO_LINE2 = '\xFE\xC0'
 
 def writeToLCD(line1 = "", line2 = ""):
 
@@ -13,13 +17,14 @@ def writeToLCD(line1 = "", line2 = ""):
     
     LCD.open()
 
-    LCD.write('\xFE\x01')
-    LCD.write('\xFE\x80')
+    LCD.write(CLEAR)
+    LCD.write(TO_LINE1)
     LCD.write(lcdLine(line1))
-    LCD.write('\xFE\xC0')
+    LCD.write(TO_LINE2)
     LCD.write(lcdLine(line2))
 
     LCD.close()
+
 
 def lcdLine(text):
 
@@ -30,11 +35,13 @@ def lcdLine(text):
 
     return choppedtext
 
+
 def log(msg):
 
     f = open('pandorabox.log', 'a+')
     f.write(msg + '\n')
     f.close()
+
 
 def parseAndWrite(secDelay = 0, changedStation = False):
 
@@ -47,21 +54,32 @@ def parseAndWrite(secDelay = 0, changedStation = False):
     else:
         writeToLCD(getShared("song"), getShared("artist"))
 
+
 def getShared(key):
 
-    fp = open("shared.pkl")
+    fp = open(SHARED_FILE)
+    fcntl.lockf(fp, fcntl.LOCK_SH)
+
     shared = pickle.load(fp)
+
+    fcntl.lockf(fp, fcntl.LOCK_UN)
     fp.close()
     
     return shared[key]
 
+
 def setShared(dictItems):
 
-    fp = open("shared.pkl", "w")
+    fp = open(SHARED_FILE, "w")
+    fcntl.lockf(fp, fcntl.LOCK_EX)
+
     pickle.dump(dictItems, fp)
+
+    fcntl.lockf(fp, fcntl.LOCK_UN)
     fp.close()
 
+
 def sendCommand(command):
-    os.system('echo "' + command + '" >> ' + fifo)
+    os.system('echo "' + command + '" >> ' + FIFO)
 
 
