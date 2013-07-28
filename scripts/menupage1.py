@@ -1,21 +1,24 @@
 from menubase import Base
 from menupage2 import Page2
 from random import randint
-import pandoraUtils
-import state
+import logging
+import pandoraUtils, state
 
 class Page1(Base):
     """PandoraBox menu page 1"""
 
+    def __init__(self):
+        self.logger = logging.getLogger('MenuPage1')
+
     def button1(self):
-        pandoraUtils.log('Page 1 - Button 1 - Skip Song')
+        self.logger.info('Page 1 - Button 1 - Skip Song')
 
         pandoraUtils.writeToLCD("Skipping", "Song")
         pandoraUtils.sendCommand('n')
 
 
     def button2(self):
-        pandoraUtils.log('Page 1 - Button 2 - Next Station')
+        self.logger.info('Page 1 - Button 2 - Next Station')
 
         current_station = pandoraUtils.getShared("stationNumber")
         station_count = pandoraUtils.getShared("stationCount")
@@ -23,7 +26,7 @@ class Page1(Base):
         if (next_station >= station_count):
             next_station = 0
 
-        pandoraUtils.log('next station: '+str(next_station))
+        self.logger.info('next station: '+str(next_station))
 
         pandoraUtils.writeToLCD("Next", "Station")
         pandoraUtils.sendCommand('s'+str(next_station))
@@ -35,7 +38,7 @@ class Page1(Base):
 
 
     def button3(self):
-        pandoraUtils.log('Page 1 - Button 3 - Vol Down')
+        self.logger.info('Page 1 - Button 3 - Vol Down')
     
         pandoraUtils.writeToLCD("Volume", "Down")
         pandoraUtils.sendCommand('((((')
@@ -44,7 +47,7 @@ class Page1(Base):
 
 
     def button4(self):
-        pandoraUtils.log('Page 1 - Button 4 - Vol Up')
+        self.logger.info('Page 1 - Button 4 - Vol Up')
 
         pandoraUtils.writeToLCD("Volume", "Up")
         pandoraUtils.sendCommand('))))')
@@ -53,7 +56,7 @@ class Page1(Base):
 
 
     def button5(self):
-        pandoraUtils.log('Page 1 - Button 5 - Play/Pause')
+        self.logger.info('Page 1 - Button 5 - Play/Pause')
 
         if state.playing_stream == "Playing":
             pandoraUtils.writeToLCD("Paused")
@@ -67,7 +70,7 @@ class Page1(Base):
 
 
     def button6(self):
-        pandoraUtils.log('Page 1 - Button 6 - Menu')
+        self.logger.info('Page 1 - Button 6 - Menu')
 
         state.current_menu = Page2()
         state.current_menu.show_menu()

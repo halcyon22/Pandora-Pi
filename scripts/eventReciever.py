@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 
-import sys, time, os, socket
-import pickle
+import sys, time, os, socket, logging, pickle
 import pandoraUtils
 
-if __name__ == "__main__":
+def main():
+
+    pandoraUtils.initLogging()
+    logger = logging.getLogger('eventReceiver')
 
     # Read event type from command arguments
     if len(sys.argv) < 2:
-        pandoraUtils.log("Error reading event type from command arguments")
+        logger.error("Error reading event type from command arguments")
+        return
 
     event_type = sys.argv[1]
-    pandoraUtils.log("event_type="+event_type)
+    logger.info("event_type="+event_type)
 
     # Read parameters from input
     params = {}
@@ -53,4 +56,9 @@ if __name__ == "__main__":
 
     elif event_type == "userlogin":
         pandoraUtils.writeToLCD("Logging in...")
+
+
+if __name__ == "__main__":
+    main()
+
 

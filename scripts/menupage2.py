@@ -1,12 +1,15 @@
-import socket
+import socket, logging
 from time import sleep
 from menubase import Base
 from menupage3 import Page3
-import pandoraUtils
-import state
+import pandoraUtils, state
 
 class Page2(Base):
     """PandoraBox menu page 2"""
+
+    def __init__(self):
+        self.logger = logging.getLogger('MenuPage2')
+
 
     def show_menu(self):
         pandoraUtils.writeToLCD("Pandora Pi", "Menu")
@@ -15,7 +18,7 @@ class Page2(Base):
         pandoraUtils.writeToLCD("1:Like 2:Dislike", "3:IP 4:Next Pg")
 
     def button1(self):
-        pandoraUtils.log('Page 2 - Button 1 - Like')
+        self.logger.info('Page 2 - Button 1 - Like')
 
         pandoraUtils.writeToLCD("Liking", pandoraUtils.getShared("song"))
         pandoraUtils.sendCommand('+')
@@ -24,7 +27,7 @@ class Page2(Base):
 
 
     def button2(self):
-        pandoraUtils.log('Page 2 - Button 2 - DisLike')
+        self.logger.info('Page 2 - Button 2 - DisLike')
 
         pandoraUtils.writeToLCD("Disliking", pandoraUtils.getShared("song"))
         pandoraUtils.sendCommand('-')
@@ -33,7 +36,7 @@ class Page2(Base):
 
 
     def button3(self):
-        pandoraUtils.log('Page 2 - Button 3 - IP Address')
+        self.logger.info('Page 2 - Button 3 - IP Address')
         IPaddr = getIPAddress()
         pandoraUtils.writeToLCD("IP Address:", IPaddr)
 
@@ -41,7 +44,7 @@ class Page2(Base):
 
 
     def button6(self):
-        pandoraUtils.log('Page 2 - Button 6 - Menu')
+        self.logger.info('Page 2 - Button 6 - Menu')
 
         state.current_menu = Page3()
         state.current_menu.show_menu()
