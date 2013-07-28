@@ -57,26 +57,20 @@ def parseAndWrite(secDelay = 0, changedStation = False):
 
 def getShared(key):
 
-    fp = open(SHARED_FILE)
-    fcntl.lockf(fp, fcntl.LOCK_SH)
-
-    shared = pickle.load(fp)
-
-    fcntl.lockf(fp, fcntl.LOCK_UN)
-    fp.close()
-    
-    return shared[key]
+    try:
+        with open(SHARED_FILE) as fp:
+            fcntl.lockf(fp, fcntl.LOCK_SH)
+            shared = pickle.load(fp)
+            return shared[key]
+    except IOError:
+        return None
 
 
 def setShared(dictItems):
 
-    fp = open(SHARED_FILE, "w")
-    fcntl.lockf(fp, fcntl.LOCK_EX)
-
-    pickle.dump(dictItems, fp)
-
-    fcntl.lockf(fp, fcntl.LOCK_UN)
-    fp.close()
+    with open(SHARED_FILE, "w") as fp:
+        fcntl.lockf(fp, fcntl.LOCK_EX)
+        pickle.dump(dictItems, fp)
 
 
 def sendCommand(command):

@@ -48,7 +48,8 @@ if __name__ == "__main__":
 
     elif event_type == "usergetstations":
         previous_station = pandoraUtils.getShared("stationNumber")
-        pandoraUtils.sendCommand('s'+str(previous_station))
+        if (previous_station != None):
+            pandoraUtils.sendCommand('s'+str(previous_station))
 
     elif event_type == "userlogin":
         pandoraUtils.writeToLCD("Logging in...")
