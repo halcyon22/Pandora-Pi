@@ -5,6 +5,7 @@ from time import sleep
 import state
 from menupage1 import Page1
 
+# GPIO.BCM channel numbers
 BUTTON1 = 4
 BUTTON2 = 17
 BUTTON3 = 21
@@ -20,51 +21,35 @@ GPIO.setup(BUTTON4, GPIO.IN)
 GPIO.setup(BUTTON5, GPIO.IN)
 GPIO.setup(BUTTON6, GPIO.IN)
 
-def main():
+state.current_menu = Page1()
 
-    state.current_menu = Page1()
+def callback_button1(channel):
+    state.current_menu.button1()
 
-    GPIO.add_event_detect(BUTTON1, GPIO.FALLING, bouncetime=500)
-    GPIO.add_event_detect(BUTTON2, GPIO.FALLING, bouncetime=500)
-    GPIO.add_event_detect(BUTTON3, GPIO.FALLING, bouncetime=500)
-    GPIO.add_event_detect(BUTTON4, GPIO.FALLING, bouncetime=500)
-    GPIO.add_event_detect(BUTTON5, GPIO.FALLING, bouncetime=500)
-    GPIO.add_event_detect(BUTTON6, GPIO.FALLING, bouncetime=500)
+def callback_button2(channel):
+    state.current_menu.button2()
 
-    while True:
+def callback_button3(channel):
+    state.current_menu.button3()
 
-        if (GPIO.event_detected(BUTTON1)):
+def callback_button4(channel):
+    state.current_menu.button4()
 
-            state.current_menu.button1()
+def callback_button5(channel):
+    state.current_menu.button5()
 
+def callback_button6(channel):
+    state.current_menu.button6()
 
-        if (GPIO.event_detected(BUTTON2)):
+BUTTONBOUNCE = 500
+GPIO.add_event_detect(BUTTON1, GPIO.FALLING, callback=callback_button1, bouncetime=BUTTONBOUNCE)
+GPIO.add_event_detect(BUTTON2, GPIO.FALLING, callback=callback_button2, bouncetime=BUTTONBOUNCE)
+GPIO.add_event_detect(BUTTON3, GPIO.FALLING, callback=callback_button3, bouncetime=BUTTONBOUNCE)
+GPIO.add_event_detect(BUTTON4, GPIO.FALLING, callback=callback_button4, bouncetime=BUTTONBOUNCE)
+GPIO.add_event_detect(BUTTON5, GPIO.FALLING, callback=callback_button5, bouncetime=BUTTONBOUNCE)
+GPIO.add_event_detect(BUTTON6, GPIO.FALLING, callback=callback_button6, bouncetime=BUTTONBOUNCE)
 
-            state.current_menu.button2()
+while state.run:
+    sleep(.5)
 
-
-        if (GPIO.event_detected(BUTTON3)):
-
-            state.current_menu.button3()
-
-
-        if (GPIO.event_detected(BUTTON4)):
-
-            state.current_menu.button4()
-
-
-        if (GPIO.event_detected(BUTTON5)):
-
-            state.current_menu.button5()
-
-            
-        if (GPIO.event_detected(BUTTON6)):
-
-            state.current_menu.button6()
-
-
-        sleep(.25)
-
-
-main()
 
