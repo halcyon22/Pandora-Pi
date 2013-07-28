@@ -1,8 +1,8 @@
 #!/usr/bin/env python
  
 import RPi.GPIO as GPIO
-from time import sleep
-import state
+import time
+import pandoraUtils, state
 from menupage1 import Page1
 
 # GPIO.BCM channel numbers
@@ -21,35 +21,56 @@ GPIO.setup(BUTTON4, GPIO.IN)
 GPIO.setup(BUTTON5, GPIO.IN)
 GPIO.setup(BUTTON6, GPIO.IN)
 
+pandoraUtils.initLogging()
 state.current_menu = Page1()
+time_stamp = time.time()
 
 def callback_button1(channel):
-    state.current_menu.button1()
+    if (attendEdge()):
+        state.current_menu.button1()
 
 def callback_button2(channel):
-    state.current_menu.button2()
+    if (attendEdge()):
+        state.current_menu.button2()
 
 def callback_button3(channel):
-    state.current_menu.button3()
+    if (attendEdge()):
+        state.current_menu.button3()
 
 def callback_button4(channel):
-    state.current_menu.button4()
+    if (attendEdge()):
+        state.current_menu.button4()
 
 def callback_button5(channel):
-    state.current_menu.button5()
+    if (attendEdge()):
+        state.current_menu.button5()
 
 def callback_button6(channel):
-    state.current_menu.button6()
+    if (attendEdge()):
+        state.current_menu.button6()
 
-BUTTONBOUNCE = 500
-GPIO.add_event_detect(BUTTON1, GPIO.FALLING, callback=callback_button1, bouncetime=BUTTONBOUNCE)
-GPIO.add_event_detect(BUTTON2, GPIO.FALLING, callback=callback_button2, bouncetime=BUTTONBOUNCE)
-GPIO.add_event_detect(BUTTON3, GPIO.FALLING, callback=callback_button3, bouncetime=BUTTONBOUNCE)
-GPIO.add_event_detect(BUTTON4, GPIO.FALLING, callback=callback_button4, bouncetime=BUTTONBOUNCE)
-GPIO.add_event_detect(BUTTON5, GPIO.FALLING, callback=callback_button5, bouncetime=BUTTONBOUNCE)
-GPIO.add_event_detect(BUTTON6, GPIO.FALLING, callback=callback_button6, bouncetime=BUTTONBOUNCE)
+def attendEdge():
+    global time_stamp
+    time_now = time.time()
 
-while state.run:
-    sleep(.5)
+    if (time_now - time_stamp) >= 0.5:
+        time_stamp = time_now
+        return True
+    else:
+        return False
+
+
+GPIO.add_event_detect(BUTTON1, GPIO.FALLING, callback=callback_button1)
+GPIO.add_event_detect(BUTTON2, GPIO.FALLING, callback=callback_button2)
+GPIO.add_event_detect(BUTTON3, GPIO.FALLING, callback=callback_button3)
+GPIO.add_event_detect(BUTTON4, GPIO.FALLING, callback=callback_button4)
+GPIO.add_event_detect(BUTTON5, GPIO.FALLING, callback=callback_button5)
+GPIO.add_event_detect(BUTTON6, GPIO.FALLING, callback=callback_button6)
+
+try:
+    while state.run:
+        time.sleep(.5)
+finally:
+    GPIO.cleanup()
 
 
