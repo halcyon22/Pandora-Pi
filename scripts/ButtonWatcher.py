@@ -12,7 +12,6 @@ BUTTON4 = 22
 BUTTON5 = 10
 BUTTON6 = 9
 
-GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON1, GPIO.IN)
 GPIO.setup(BUTTON2, GPIO.IN)
@@ -25,36 +24,41 @@ def main():
 
     state.current_menu = Page1()
 
+    GPIO.add_event_detect(BUTTON1, GPIO.FALLING, bouncetime=500)
+    GPIO.add_event_detect(BUTTON2, GPIO.FALLING, bouncetime=500)
+    GPIO.add_event_detect(BUTTON3, GPIO.FALLING, bouncetime=500)
+    GPIO.add_event_detect(BUTTON4, GPIO.FALLING, bouncetime=500)
+    GPIO.add_event_detect(BUTTON5, GPIO.FALLING, bouncetime=500)
+    GPIO.add_event_detect(BUTTON6, GPIO.FALLING, bouncetime=500)
+
     while True:
 
-        # Default Page
-
-        if (GPIO.input(BUTTON1) == False):
+        if (GPIO.event_detected(BUTTON1)):
 
             state.current_menu.button1()
 
 
-        if (GPIO.input(BUTTON2) == False):
+        if (GPIO.event_detected(BUTTON2)):
 
             state.current_menu.button2()
 
 
-        if (GPIO.input(BUTTON3) == False):
+        if (GPIO.event_detected(BUTTON3)):
 
             state.current_menu.button3()
 
 
-        if (GPIO.input(BUTTON4) == False):
+        if (GPIO.event_detected(BUTTON4)):
 
             state.current_menu.button4()
 
 
-        if (GPIO.input(BUTTON5) == False):
+        if (GPIO.event_detected(BUTTON5)):
 
             state.current_menu.button5()
 
             
-        if (GPIO.input(BUTTON6) == False):
+        if (GPIO.event_detected(BUTTON6)):
 
             state.current_menu.button6()
 
@@ -63,3 +67,4 @@ def main():
 
 
 main()
+
