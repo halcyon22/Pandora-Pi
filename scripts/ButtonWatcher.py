@@ -3,7 +3,7 @@
 import RPi.GPIO as GPIO
 import time
 import pandoraUtils, state
-from menupage1 import Page1
+import menupage1
 
 # GPIO.BCM channel numbers
 BUTTON1 = 4
@@ -22,7 +22,7 @@ GPIO.setup(BUTTON5, GPIO.IN)
 GPIO.setup(BUTTON6, GPIO.IN)
 
 pandoraUtils.initLogging()
-state.current_menu = Page1()
+state.current_menu = menupage1.Page1()
 time_stamp = time.time()
 
 def callback_button1(channel):

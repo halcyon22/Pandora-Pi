@@ -1,10 +1,9 @@
 import socket, logging
 from time import sleep
-from menubase import Base
-from menupage3 import Page3
+import menubase, menupage3
 import pandoraUtils, state
 
-class Page2(Base):
+class Page2(menubase.Base):
     """PandoraBox menu page 2"""
 
     def __init__(self):
@@ -46,7 +45,7 @@ class Page2(Base):
     def button6(self):
         self.logger.info('Page 2 - Button 6 - Menu')
 
-        state.current_menu = Page3()
+        state.current_menu = menupage3.Page3()
         state.current_menu.show_menu()
 
 

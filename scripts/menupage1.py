@@ -1,10 +1,9 @@
-from menubase import Base
-from menupage2 import Page2
+import menubase, menupage2
 from random import randint
 import logging
 import pandoraUtils, state
 
-class Page1(Base):
+class Page1(menubase.Base):
     """PandoraBox menu page 1"""
 
     def __init__(self):
@@ -72,7 +71,7 @@ class Page1(Base):
     def button6(self):
         self.logger.info('Page 1 - Button 6 - Menu')
 
-        state.current_menu = Page2()
+        state.current_menu = menupage2.Page2()
         state.current_menu.show_menu()
 
 
