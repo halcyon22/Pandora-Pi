@@ -1,10 +1,9 @@
 from time import sleep
-#from subprocess import Popen
-from menubase import Base
+import menubase, menupage1, menupower
 import logging
 import pandoraUtils, state
 
-class Page3(Base):
+class Page3(menubase.Base):
     """PandoraBox menu page 3"""
 
     def __init__(self):
@@ -25,41 +24,18 @@ class Page3(Base):
     def button2(self):
         self.logger.info('Page 3 - Button 2 - Off')
 
-        pandoraUtils.writeToLCD("Disliking", pandoraUtils.getShared("song"))
-        pandoraUtils.sendCommand('-')
+        pandoraUtils.writeToLCD("Shutting Down", "Thanks")
+        pandoraUtils.sendCommand('q')
 
-        pandoraUtils.parseAndWrite(2)
-
-
-        # if (GPIO.input(BUTTON3) == False  and current_screen == "menupg2"):
-
-        #   self.logger.info('Button 6 - Menu - Sub 3 - Shutdown')
-        #   pandoraUtils.writeToLCD("Shutting Down", "Thanks")
-        #   pianobarProcess.terminate()
-        #   # os.system('echo "q" >> ' + fifo)
-
-        #   sleep(2)
-
-        #   pandoraUtils.writeToLCD("Pandora Pi: OFF", "1: Turn ON")
-        #   current_screen = "off"
-
-        # if ( GPIO.input(BUTTON1) == False  and current_screen == "off"):
-
-        #   pianobarProcess = Popen('sudo -u pi pianobar', shell=True)
-
-        #   PandoraUtils.writeToLCD("Pandora Pi", "Starting")
-
-        #   current_screen = "default"
-
-        #   sleep(4)
-
-        #   pandoraUtils.parseAndWrite()
-
+        sleep(2)
+        state.current_menu = menupower.MenuPower()
+        state.current_menu.show_menu()
 
 
     def button6(self):
         self.logger.info('Page 3 - Button 6 - Now Playing')
 
+        state.current_menu = menupage1.Page1()
         pandoraUtils.parseAndWrite()
 
 
